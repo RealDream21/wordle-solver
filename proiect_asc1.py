@@ -1,7 +1,7 @@
 import random
 
 #citire si crearea listei
-f = open('data.in','r')
+f = open('wordlist.txt','r')
 
 #luam un cuvant random
 x = random.choice(list(f))
