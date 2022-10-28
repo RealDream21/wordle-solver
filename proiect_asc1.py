@@ -12,21 +12,15 @@ cuv=input("cuv=")
 #lista initiata cu valoare vida
 s=" "
 
-#contor: de cate ori este litera in cuv
-k=0
-
 #Program pentru ghcirea cuvantului
 for i in range (0,5): 
-    k=x.count(cuv[i])
-    print(k)
     if cuv[i]==x[i]:
         #print(2)
         s+=x[i]+""
-        k=k-1
     else:    
         if cuv[i] in x:
             #print(1)
-            s+="k"+""
+            s+="1"+""
         else:
             #print(0)
            s+="0"+""
