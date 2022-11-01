@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-
+#branch
 using namespace std;
 
 ifstream fin("wordlist.in");
