@@ -1,5 +1,5 @@
 import random
-
+#salut
 #citire si crearea listei
 f = open('wordlist.txt','r')
 
