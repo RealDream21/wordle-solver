@@ -29,14 +29,15 @@ def entropy_for_word(word):
         for tryout_word in content_list:
             elim = 0
             for index in range(5):
-                if template[index] == "2" and tryout_word[index] != word[index]:
+                if template[index] == "0" and word[index] not in tryout_word:
+                    elim = 1
+                elif if template[index] == "2" and tryout_word[index] != word[index]:
                     elim = 1
                 elif template[index] == "1" and word[index] not in tryout_word:
                     elim = 1
-                    nr_cuv_eliminate += elim
-                    sum_entropy += entropy(nr_cuv_eliminate)
+            nr_cuv_eliminate += elim
+            sum_entropy += entropy(nr_cuv_eliminate)
     return sum_entropy
-#Am verificat ACERB, pana acum cel mai bun cuvant este ABROG, pozitia parcursa: 45
 maxim = 0.0
 best_word = ""
 k = 0
