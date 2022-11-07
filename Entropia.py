@@ -58,29 +58,30 @@ for word in content_list:
 g = open('data.out.txt','w')
 
 block=[0 for i in range(len(content_list))]
+litera_blocata=[0 for i in range(26)] #practic aici pun de cate ori imi apare litera in cuvant 
+                                      #in functie de cati de 1 si 2 am
+
 word_tryout="ABACA"
 entropia=0.0
 for template in B3:
     for i in range(len(content_list)):
         block[i]=0
 
-    """
     g.write(word_tryout)
     g.write('\n')
     g.write(str(template))
     g.write('\n')
     g.write('\n')
-    """
 
     poz=0
     
-    copy_list=content_list[:]
+    #copy_list=content_list[:]
 
-    litera_blocata=[0 for i in range(26)] #practic aici pun de cate ori imi apare litera in cuvant 
-                                          #in functie de cati de 1 si 2 am
+    for i in range(26):
+        litera_blocata[i]=0
     
     for letter in range (5):    
-        if template[letter]==2: 
+        if template[letter]==2:
             litera_blocata[ord(word_tryout[letter])-ord('A')]+=1 #daca litera imi apare in cuvant cresc aparatiile
             
     for letter in range (5):    
@@ -107,30 +108,45 @@ for template in B3:
                     if word_tryout[letter]!=content_list[poz][letter]:
                         block[poz]=1
             
-        #pentru cazul cand e 1 nu trebuie sa mai facem verificari deoarece ce se intampla mai sus atunci cand ne uitam daca litera apare de mai multe ori in cuvant sau nu 
+        if block[poz]==0:
+            for letter in range (5):
+                if template[letter]==1: #daca am 1 tre neaparat sa fie in cuvant
+                    if word_tryout[letter]==content_list[poz][letter]:
+                        block[poz]=1
+                    if word_tryout[letter] not in content_list[poz]: 
+                        block[poz]=1
 
         if block[poz]==0:
             for letter in range (5):
                 if template[letter]==0 and litera_blocata[ord(word_tryout[letter])-ord('A')]==0:
-                    g.write(content_list[poz])
-                    g.write('\n')
                     if word_tryout[letter] in content_list[poz]:
+                        g.write(content_list[poz])
+                        g.write('\n')
                         block[poz]=1 
-                
-            
+                   
         poz=poz+1
-    
+    g.write('\n')  
+    g.write("Cuvinte care raman:\n")
+
     """
     for i in range (len(content_list)):
         if block[i]==0:
             g.write(content_list[i])
             g.write('\n')
     """
+    
     # numaram cuvintele eliminate   
     nr_cuv_elim=0
     for i in range (len(content_list)):
+        if block[i]==0:
+            g.write(content_list[i])
+            g.write('\n')
+
+    for i in range (len(content_list)):
         if block[i]==1:
             nr_cuv_elim+=1
+
+    g.write('\n')
 
     #calculam entropia
     entropia+=entropy(nr_cuv_elim)
@@ -138,56 +154,26 @@ for template in B3:
 print (entropia)
 
 g.close()
-#ceva ifuri
-""" elif template[letter]==1:
-                if word_tryout[letter] in content_list[poz] and word_tryout[letter]!=content_list[poz][letter]:
-                    block[poz]=1  
-            elif template[letter]==0:
-                if word_tryout[letter] in content_list[poz]:
-                    block[poz]=1"""
-
 
 """
 
+OBSERV CA NU RAMAN DOAR CUVINTELE CARE CONTIN LITERA CU VAL 1
+
+
 daca e 0 consider ca nu exista
 dar e posibil sa am
-BBACA
-02101
+ A  B  A  C  A
+[1, 1, 0, 1, 0]
+[0, 1, 1, 1, 0]
+[0, 1, 0, 1, 1]
+
+
 
 si cuv ABBBB
 
 deci eu trebuie sa verific daca mai sunt de 2 sau 1 si e aceeasi litera cu litera care are 0 in template
 
-
-
 """
-
-
-"""
-B3_v2=[]
-for i in range(243):
-    aux=i
-    text =""
-    for j in range(5):
-        text = text + str(aux % 3)
-        aux=aux//3
-    B3_v2.append(text)
-sum_entropy = 0
-word = "ABACA"
-for template in B3_v2:
-    nr_cuv_eliminate = 0
-    for tryout_word in content_list:
-        elim = 0
-        for index in range(5):
-            if template[index] == "2" and tryout_word[index] != word[index]:
-                elim = 1
-            elif template[index] == "1" and word[index] not in tryout_word:
-                elim = 1
-        nr_cuv_eliminate += elim
-    sum_entropy += entropy(nr_cuv_eliminate)
-print(sum_entropy)
-"""
-
 
 """
 ABACA
@@ -204,29 +190,6 @@ pi=cuvramase/len(content_list)
 
 """
 
-#program
-"""
-
-nr de cuv eliminat
-suma de len()-nr de cuv eliminat 
-salvam cuvant cu entropia cea mai mare
-vrei sa ramai in lista cu cuvintele ramase DUPA ce primesti 
-feeedback de la primu program, 
-
-eliminarea din lista tot in primu
-
-"""
-
-
-poz=0
-while poz < len(content_list):
-    cuv=content_list[poz]
-    for i in range (poz):
-        cuvanalizat=content_list[i]
-    poz=poz+1
-    
-
-
 """
 #luam un cuvant random
 x = random.choice(content_list)
@@ -241,11 +204,13 @@ while poz < len(content_list):
     poz=poz+1    
 """
 
+"""
 #afisare
 g = open('data.out.txt','w')
 #g.write(x)
 f.close
 g.close
+"""
 
 """
 for i in range (5):
