@@ -55,16 +55,28 @@ for word in content_list:
 
 #AIIIICI
 
-block=[0 for i in range(242)]
+g = open('data.out.txt','w')
+
+block=[0 for i in range(len(content_list))]
 word_tryout="ABACA"
 entropia=0.0
 for template in B3:
-    
+    for i in range(len(content_list)):
+        block[i]=0
+
+    """
+    g.write(word_tryout)
+    g.write('\n')
+    g.write(str(template))
+    g.write('\n')
+    g.write('\n')
+    """
+
     poz=0
     
     copy_list=content_list[:]
 
-    litera_blocata=[0 for i in range(25)] #practic aici pun de cate ori imi apare litera in cuvant 
+    litera_blocata=[0 for i in range(26)] #practic aici pun de cate ori imi apare litera in cuvant 
                                           #in functie de cati de 1 si 2 am
     
     for letter in range (5):    
@@ -77,7 +89,7 @@ for template in B3:
 
     while poz < len (content_list):
 
-        aparitii_lit_cuv_lista=[0 for i in range(25)] #aparitiile literei cuvantului din listap
+        aparitii_lit_cuv_lista=[0 for i in range(26)] #aparitiile literei cuvantului din lista
         
         for letter in range (5):
             aparitii_lit_cuv_lista[ord(content_list[poz][letter])-ord('A')]+=1
@@ -95,22 +107,37 @@ for template in B3:
                     if word_tryout[letter]!=content_list[poz][letter]:
                         block[poz]=1
             
-            for letter in range (5):
-                if template[letter]==1:
-                    litera_blocata[ord(word_tryout[letter])-ord('A')] 
-            
+        #pentru cazul cand e 1 nu trebuie sa mai facem verificari deoarece ce se intampla mai sus atunci cand ne uitam daca litera apare de mai multe ori in cuvant sau nu 
+
+        if block[poz]==0:
             for letter in range (5):
                 if template[letter]==0 and litera_blocata[ord(word_tryout[letter])-ord('A')]==0:
+                    g.write(content_list[poz])
+                    g.write('\n')
                     if word_tryout[letter] in content_list[poz]:
-                        block[poz]=1
-                elif template[letter]==0 and litera_blocata[ord(word_tryout[letter])-ord('A')]!=0:
+                        block[poz]=1 
                 
             
         poz=poz+1
-    #entropia+=entropy(nr_cuv_elim)
-#print (entropia)
+    
+    """
+    for i in range (len(content_list)):
+        if block[i]==0:
+            g.write(content_list[i])
+            g.write('\n')
+    """
+    # numaram cuvintele eliminate   
+    nr_cuv_elim=0
+    for i in range (len(content_list)):
+        if block[i]==1:
+            nr_cuv_elim+=1
 
+    #calculam entropia
+    entropia+=entropy(nr_cuv_elim)
 
+print (entropia)
+
+g.close()
 #ceva ifuri
 """ elif template[letter]==1:
                 if word_tryout[letter] in content_list[poz] and word_tryout[letter]!=content_list[poz][letter]:
@@ -124,8 +151,8 @@ for template in B3:
 
 daca e 0 consider ca nu exista
 dar e posibil sa am
-ABACA
-22200
+BBACA
+02101
 
 si cuv ABBBB
 
