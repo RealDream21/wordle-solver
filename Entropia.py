@@ -1,6 +1,5 @@
 import random
 import math
-from tqdm import tqdm
 
 f = open('wordlist.txt','r')
 
@@ -43,21 +42,6 @@ def entropy(nr_cuvinte_eliminate):
     shanon = (nr_cuvinte_ramase/cuv_totale)*(math.log2((cuv_totale/nr_cuvinte_ramase)))
     return shanon
 
-"""
-for word in content_list:
-    nr_cuv_elim=0
-    test_list = content_list.copy()
-    for template in B3:
-        for letter, value, index in zip(word, template, range(5)):
-            for word_tryout in content_list:
-                if value==2 and word_tryout[index] != letter:
-                    nr_cuv_elim+=1
-                elif value == 1 and letter not in word_tryout:
-                    nr_cuv_elim+=1
-                elif value == 0 and letter in word_tryout:
-                    nr_cuv_elim+=1
-
-"""
 
 #AIIIICI
 
@@ -65,8 +49,13 @@ g = open('data.out.txt','w')
 
 block=[0 for i in range(len(content_list))]
 
-litera_blocata=[0 for i in range(26)] #practic aici pun de cate ori imi apare litera in cuvant 
-                                      #in functie de cati de 1 si 2 am
+litera_blocata_2=[0 for i in range(26)] #practic aici pun de cate ori imi apare litera in cuvant 
+                                      #in functie de cati de 2 am
+
+litera_blocata_1=[0 for i in range(26)] #practic aici pun de cate ori imi apare litera in cuvant 
+                                      #in functie de cati de 1 am
+
+aparitii_lit_cuv_word_tryout=[0 for i in range(26)]
 
 aparitii_lit_cuv_lista=[0 for i in range(26)] #aparitiile literei cuvantului din lista
 
@@ -74,8 +63,7 @@ entropia_max=0.0
 
 cuv_entropia_max=[0 for i in range(1)]
 
-
-for word_tryout in tqdm(content_list):
+for word_tryout in content_list:
     
     entropia=0.0
     
@@ -83,30 +71,38 @@ for word_tryout in tqdm(content_list):
         for i in range(len(content_list)):
             block[i]=0
 
-        """
         g.write(word_tryout)
         g.write('\n')
         g.write(str(template))
         g.write('\n')
         g.write('\n')
-        """
 
         poz=0
         
         #copy_list=content_list[:]
 
         for i in range(26):
-            litera_blocata[i]=0
+            block[i]=0
+
+        for i in range(26):
+            litera_blocata_2[i]=0
         
+        for i in range(26):
+            litera_blocata_1[i]=0
+        
+        for letter in range (5):
+            aparitii_lit_cuv_word_tryout[ord(word_tryout[letter])-ord('A')]+=1
+
         for letter in range (5):    
             if template[letter]==2:
-                litera_blocata[ord(word_tryout[letter])-ord('A')]+=1 #daca litera imi apare in cuvant cresc aparatiile
+                litera_blocata_2[ord(word_tryout[letter])-ord('A')]+=1 #daca litera imi apare in cuvant cu temp 2 cresc aparatiile
                 
         for letter in range (5):    
             if template[letter]==1: 
-                litera_blocata[ord(word_tryout[letter])-ord('A')]+=1 #daca litera imi apare in cuvant cresc aparitiile
+                litera_blocata_1[ord(word_tryout[letter])-ord('A')]+=1 #daca litera imi apare in cuvant cu temp 1 cresc aparitiile
 
         while poz < len (content_list):
+            
             for i in range(26):
                 aparitii_lit_cuv_lista[i]=0 #aparitiile literei cuvantului din lista
             
@@ -114,37 +110,43 @@ for word_tryout in tqdm(content_list):
                 aparitii_lit_cuv_lista[ord(content_list[poz][letter])-ord('A')]+=1
 
             for letter in range (5):
-                if litera_blocata[ord(word_tryout[letter])-ord('A')]!=0: #daca litera mea exista in cuvant, adica am cel putin o val de 1 sau de 2 atunci ma uit in cuvantul meu
+                if litera_blocata_1[ord(word_tryout[letter])-ord('A')]!=0 or litera_blocata_2[ord(word_tryout[letter])-ord('A')]!=0: #daca litera mea exista in cuvant, adica am cel putin o val de 1 sau de 2 atunci ma uit in cuvantul meu
                     for letter_sec in range(5):
                             if word_tryout[letter]==content_list[poz][letter_sec]: #daca litera mea e in cuv atunci verific daca imi apare de mai multe ori sau nu
-                                if litera_blocata[ord(word_tryout[letter])-ord('A')]>aparitii_lit_cuv_lista[ord(content_list[poz][letter_sec])-ord('A')]:    
-                                    block[poz]=1 # daca litera mea apare de mai multe ori decat in cuvant atunci elimin cuvantul ca nu e posibil sa primesc tipul ala de feedback pe el
+                                if (litera_blocata_1[ord(word_tryout[letter])-ord('A')]+litera_blocata_2[ord(word_tryout[letter])-ord('A')])>aparitii_lit_cuv_lista[ord(content_list[poz][letter_sec])-ord('A')]:    
+                                    block[poz]=1 # daca litera mea apare de mai multe ori decat in cuvantul incercat, atunci elimin cuvantul din lista ca nu e posibil sa primesc tipul ala de feedback pe el
             
             if block[poz]==0:
                 for letter in range (5):
                     if template[letter]==2: 
                         if word_tryout[letter]!=content_list[poz][letter]:
                             block[poz]=1
+                        elif aparitii_lit_cuv_word_tryout[ord(word_tryout[letter])-ord('A')] > (litera_blocata_2[ord(word_tryout[letter])-ord('A')]+litera_blocata_1[ord(word_tryout[letter])-ord('A')]):
+                            if aparitii_lit_cuv_lista[ord(content_list[poz][letter])-ord('A')] > (litera_blocata_2[ord(word_tryout[letter])-ord('A')]+litera_blocata_1[ord(word_tryout[letter])-ord('A')]):
+                                block[poz]=1
                 
             if block[poz]==0:
                 for letter in range (5):
                     if template[letter]==1: #daca am 1 tre neaparat sa fie in cuvant
                         if word_tryout[letter]==content_list[poz][letter]:
                             block[poz]=1
-                        if word_tryout[letter] not in content_list[poz]: 
+                        elif word_tryout[letter] not in content_list[poz]: 
                             block[poz]=1
+                        elif aparitii_lit_cuv_word_tryout[ord(word_tryout[letter])-ord('A')] > (litera_blocata_2[ord(word_tryout[letter])-ord('A')]+litera_blocata_1[ord(word_tryout[letter])-ord('A')]):
+                            if aparitii_lit_cuv_lista[ord(content_list[poz][letter])-ord('A')] > (litera_blocata_2[ord(word_tryout[letter])-ord('A')]+litera_blocata_1[ord(word_tryout[letter])-ord('A')]):
+                                block[poz]=1
 
             if block[poz]==0:
                 for letter in range (5):
-                    if template[letter]==0 and litera_blocata[ord(word_tryout[letter])-ord('A')]==0:
+                    if template[letter]==0 and (litera_blocata_1[ord(word_tryout[letter])-ord('A')]==0 or litera_blocata_2[ord(word_tryout[letter])-ord('A')]):
                         if word_tryout[letter] in content_list[poz]:
                             block[poz]=1 
                             break
                     
             poz=poz+1
         
-        """
-        
+        #"""
+
         g.write('\n')  
         g.write("Cuvinte eliminate:\n")
         for i in range (len(content_list)):
@@ -160,7 +162,7 @@ for word_tryout in tqdm(content_list):
                 g.write(content_list[i])
                 g.write('\n')
         
-        """
+        #"""
 
         # numaram cuvintele eliminate
         nr_cuv_elim=0
@@ -175,10 +177,11 @@ for word_tryout in tqdm(content_list):
     
     if entropia>entropia_max:
         print (str(cuv_entropia_max),entropia_max,sep=" ")
+        print ()
         entropia_max=entropia
         cuv_entropia_max[0]=word_tryout
 
-print (str(cuv_entropia_max))
+print ("Cuvantul cu cea mai mare entropie: ", str(cuv_entropia_max), sep=" ")
 print (entropia_max)
 
 g.close()
@@ -197,8 +200,13 @@ dar e posibil sa am
 [0, 1, 0, 1, 1]
 
 
+ABACA
+10000
 
-si cuv ABBBB
+--> elimin toate cuvintele care incep cu A, il contin pe B si pe C, 
+    si cuv contin mai mult de o singura litera de A
+
+si cuv BBABA
 
 deci eu trebuie sa verific daca mai sunt de 2 sau 1 si e aceeasi litera cu litera care are 0 in template
 
