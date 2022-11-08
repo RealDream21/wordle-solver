@@ -45,7 +45,7 @@ def entropy(nr_cuvinte_eliminate):
 
 #AIIIICI
 
-g = open('data.out.txt','w')
+#g = open('data.out.txt','w')
 
 block=[0 for i in range(len(content_list))]
 
@@ -70,12 +70,6 @@ for word_tryout in content_list:
     for template in B3:
         for i in range(len(content_list)):
             block[i]=0
-
-        g.write(word_tryout)
-        g.write('\n')
-        g.write(str(template))
-        g.write('\n')
-        g.write('\n')
 
         poz=0
         
@@ -145,7 +139,7 @@ for word_tryout in content_list:
                     
             poz=poz+1
         
-        #"""
+        """
 
         g.write('\n')  
         g.write("Cuvinte eliminate:\n")
@@ -162,7 +156,7 @@ for word_tryout in content_list:
                 g.write(content_list[i])
                 g.write('\n')
         
-        #"""
+        """
 
         # numaram cuvintele eliminate
         nr_cuv_elim=0
@@ -184,7 +178,7 @@ for word_tryout in content_list:
 print ("Cuvantul cu cea mai mare entropie: ", str(cuv_entropia_max), sep=" ")
 print (entropia_max)
 
-g.close()
+#g.close()
 
 
 """
