@@ -1,5 +1,6 @@
 import random
 import math
+from tqdm import tqdm
 
 f = open('wordlist.txt','r')
 
@@ -32,9 +33,14 @@ for line in B3:
 #entropia
 def entropy(nr_cuvinte_eliminate):
     cuv_totale=len(content_list)
-    numarator = cuv_totale - nr_cuvinte_eliminate
-    #print(numarator, nr_cuvinte_eliminate, cuv_totale, sep=" ")
-    shanon = (numarator/cuv_totale)*(math.log2((cuv_totale/numarator)))
+    if nr_cuvinte_eliminate==cuv_totale: #consideram cazul in care elimin toate cuvintele 
+                                         #deoarece templateul meu nu merge pe nici un caz,
+                                         #deci entropia mea e 0 deoarece nu obtin nici o informatie
+        return 0
+
+    nr_cuvinte_ramase = cuv_totale - nr_cuvinte_eliminate
+
+    shanon = (nr_cuvinte_ramase/cuv_totale)*(math.log2((cuv_totale/nr_cuvinte_ramase)))
     return shanon
 
 """
@@ -58,102 +64,125 @@ for word in content_list:
 g = open('data.out.txt','w')
 
 block=[0 for i in range(len(content_list))]
+
 litera_blocata=[0 for i in range(26)] #practic aici pun de cate ori imi apare litera in cuvant 
                                       #in functie de cati de 1 si 2 am
 
-word_tryout="ABACA"
-entropia=0.0
-for template in B3:
-    for i in range(len(content_list)):
-        block[i]=0
+aparitii_lit_cuv_lista=[0 for i in range(26)] #aparitiile literei cuvantului din lista
 
-    g.write(word_tryout)
-    g.write('\n')
-    g.write(str(template))
-    g.write('\n')
-    g.write('\n')
+entropia_max=0.0
 
-    poz=0
+cuv_entropia_max=[0 for i in range(1)]
+
+
+for word_tryout in tqdm(content_list):
     
-    #copy_list=content_list[:]
-
-    for i in range(26):
-        litera_blocata[i]=0
+    entropia=0.0
     
-    for letter in range (5):    
-        if template[letter]==2:
-            litera_blocata[ord(word_tryout[letter])-ord('A')]+=1 #daca litera imi apare in cuvant cresc aparatiile
-            
-    for letter in range (5):    
-        if template[letter]==1: 
-            litera_blocata[ord(word_tryout[letter])-ord('A')]+=1 #daca litera imi apare in cuvant cresc aparitiile
+    for template in B3:
+        for i in range(len(content_list)):
+            block[i]=0
 
-    while poz < len (content_list):
+        """
+        g.write(word_tryout)
+        g.write('\n')
+        g.write(str(template))
+        g.write('\n')
+        g.write('\n')
+        """
 
-        aparitii_lit_cuv_lista=[0 for i in range(26)] #aparitiile literei cuvantului din lista
+        poz=0
         
-        for letter in range (5):
-            aparitii_lit_cuv_lista[ord(content_list[poz][letter])-ord('A')]+=1
+        #copy_list=content_list[:]
 
-        for letter in range (5):
-            if litera_blocata[ord(word_tryout[letter])-ord('A')]!=0: #daca litera mea exista in cuvant, adica am cel putin o val de 1 sau de 2 atunci ma uit in cuvantul meu
-                for letter_sec in range(5):
-                        if word_tryout[letter]==content_list[poz][letter_sec]: #daca litera mea e in cuv atunci verific daca imi apare de mai multe ori sau nu
-                            if litera_blocata[ord(word_tryout[letter])-ord('A')]>aparitii_lit_cuv_lista[ord(content_list[poz][letter_sec])-ord('A')]:    
-                                block[poz]=1 # daca litera mea apare de mai multe ori decat in cuvant atunci elimin cuvantul ca nu e posibil sa primesc tipul ala de feedback pe el
+        for i in range(26):
+            litera_blocata[i]=0
         
-        if block[poz]==0:
-            for letter in range (5):
-                if template[letter]==2: 
-                    if word_tryout[letter]!=content_list[poz][letter]:
-                        block[poz]=1
+        for letter in range (5):    
+            if template[letter]==2:
+                litera_blocata[ord(word_tryout[letter])-ord('A')]+=1 #daca litera imi apare in cuvant cresc aparatiile
+                
+        for letter in range (5):    
+            if template[letter]==1: 
+                litera_blocata[ord(word_tryout[letter])-ord('A')]+=1 #daca litera imi apare in cuvant cresc aparitiile
+
+        while poz < len (content_list):
+            for i in range(26):
+                aparitii_lit_cuv_lista[i]=0 #aparitiile literei cuvantului din lista
             
-        if block[poz]==0:
             for letter in range (5):
-                if template[letter]==1: #daca am 1 tre neaparat sa fie in cuvant
-                    if word_tryout[letter]==content_list[poz][letter]:
-                        block[poz]=1
-                    if word_tryout[letter] not in content_list[poz]: 
-                        block[poz]=1
+                aparitii_lit_cuv_lista[ord(content_list[poz][letter])-ord('A')]+=1
 
-        if block[poz]==0:
             for letter in range (5):
-                if template[letter]==0 and litera_blocata[ord(word_tryout[letter])-ord('A')]==0:
-                    if word_tryout[letter] in content_list[poz]:
-                        g.write(content_list[poz])
-                        g.write('\n')
-                        block[poz]=1 
-                   
-        poz=poz+1
-    g.write('\n')  
-    g.write("Cuvinte care raman:\n")
+                if litera_blocata[ord(word_tryout[letter])-ord('A')]!=0: #daca litera mea exista in cuvant, adica am cel putin o val de 1 sau de 2 atunci ma uit in cuvantul meu
+                    for letter_sec in range(5):
+                            if word_tryout[letter]==content_list[poz][letter_sec]: #daca litera mea e in cuv atunci verific daca imi apare de mai multe ori sau nu
+                                if litera_blocata[ord(word_tryout[letter])-ord('A')]>aparitii_lit_cuv_lista[ord(content_list[poz][letter_sec])-ord('A')]:    
+                                    block[poz]=1 # daca litera mea apare de mai multe ori decat in cuvant atunci elimin cuvantul ca nu e posibil sa primesc tipul ala de feedback pe el
+            
+            if block[poz]==0:
+                for letter in range (5):
+                    if template[letter]==2: 
+                        if word_tryout[letter]!=content_list[poz][letter]:
+                            block[poz]=1
+                
+            if block[poz]==0:
+                for letter in range (5):
+                    if template[letter]==1: #daca am 1 tre neaparat sa fie in cuvant
+                        if word_tryout[letter]==content_list[poz][letter]:
+                            block[poz]=1
+                        if word_tryout[letter] not in content_list[poz]: 
+                            block[poz]=1
 
-    """
-    for i in range (len(content_list)):
-        if block[i]==0:
-            g.write(content_list[i])
-            g.write('\n')
-    """
+            if block[poz]==0:
+                for letter in range (5):
+                    if template[letter]==0 and litera_blocata[ord(word_tryout[letter])-ord('A')]==0:
+                        if word_tryout[letter] in content_list[poz]:
+                            block[poz]=1 
+                            break
+                    
+            poz=poz+1
+        
+        """
+        
+        g.write('\n')  
+        g.write("Cuvinte eliminate:\n")
+        for i in range (len(content_list)):
+            if block[i]==1:
+                g.write(content_list[i])
+                g.write('\n')
+
+        g.write('\n')
+
+        g.write("Cuvinte ramase:\n") 
+        for i in range (len(content_list)):
+            if block[i]==0:
+                g.write(content_list[i])
+                g.write('\n')
+        
+        """
+
+        # numaram cuvintele eliminate
+        nr_cuv_elim=0
+        for i in range (len(content_list)):
+            if block[i]==1:
+                nr_cuv_elim+=1
+
+        #g.write('\n')
+
+        #calculam entropia
+        entropia+=entropy(nr_cuv_elim)
     
-    # numaram cuvintele eliminate   
-    nr_cuv_elim=0
-    for i in range (len(content_list)):
-        if block[i]==0:
-            g.write(content_list[i])
-            g.write('\n')
+    if entropia>entropia_max:
+        print (str(cuv_entropia_max),entropia_max,sep=" ")
+        entropia_max=entropia
+        cuv_entropia_max[0]=word_tryout
 
-    for i in range (len(content_list)):
-        if block[i]==1:
-            nr_cuv_elim+=1
-
-    g.write('\n')
-
-    #calculam entropia
-    entropia+=entropy(nr_cuv_elim)
-
-print (entropia)
+print (str(cuv_entropia_max))
+print (entropia_max)
 
 g.close()
+
 
 """
 
