@@ -52,14 +52,13 @@ def entropy_for_word(word):
             nr_cuv_eliminate += elim
         sum_entropy += entropy(nr_cuv_eliminate)
     return sum_entropy
-best_word = "AERUL" #se introduce cel mai bun cuvant
+best_word = "AUREI" #se introduce cel mai bun cuvant
 maxim = entropy_for_word(best_word) #nu trebuie schimbat nimic, calculeaza pt best_word
-k = 330 #ca si k se introcue fix ce este in [], deci nu trb sa calculezi nimic
+k = 743 #ca si k se introcue fix ce este in [], deci nu trb sa calculezi nimic
 
 #Am verificat ACHIT, entropia actuala: 27.648036638297036. Pana acum cel mai bun cuvant este ABTIE,cu entropia 30.05835827752119 pozitia parcursa: [50]
 #Am verificat ADAUS, entropia actuala: 25.647092420139366. Pana acum cel mai bun cuvant este ACREI,cu entropia 31.743474933106608 pozitia parcursa: [100]
-#Am verificat ALPIN, entropia actuala: 28.108158203684876. Pana acum cel mai bun cuvant este AERUL,cu entropia 32.600482174587846 pozitia parcursa: [329]
-#Am verificat ALTAR, entropia actuala: 26.542650190184943. Pana acum cel mai bun cuvant este AERUL,cu entropia 32.600482174587846 pozitia parcursa: [330]
+#Am verificat AVIVA, entropia actuala: 24.24475933323238. Pana acum cel mai bun cuvant este AUREI,cu entropia 35.16518030783676 pozitia parcursa: [743]
 #print(f"Am verificat {cuv}, entropia actuala: {entropie}. Pana acum cel mai bun cuvant este {best_word},cu entropia {maxim} pozitia parcursa: [{k}]")
 
 for cuv in content_list[k:]:
