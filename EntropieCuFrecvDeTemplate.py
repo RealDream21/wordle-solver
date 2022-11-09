@@ -1,4 +1,5 @@
 import math
+from tqdm import tqdm
 
 f = open('wordlist.txt','r')
 
@@ -23,9 +24,9 @@ pos_temp=0
 entropy_max=0.0
 word_entropy_max=[""]
 
-g = open('data.out.txt','w')
+g = open('solutii.txt','w')
 
-for word in content_list: # pt cuvantul asta eu primesc feedback
+for word in tqdm(content_list): # pt cuvantul asta eu primesc feedback
     
     pos_temp=0
     entropy_calc=0.0
@@ -75,7 +76,7 @@ for word in content_list: # pt cuvantul asta eu primesc feedback
         entropy_max=entropy_calc
         word_entropy_max[0]=word
 
-g.close()
+g.write(word_entropy_max[0])
 
 print()
 print(str(word_entropy_max[0]), entropy_max, sep=" ")
