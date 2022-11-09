@@ -45,7 +45,7 @@ def entropy(nr_cuvinte_eliminate):
 
 #AIIIICI
 
-g = open('data.out.txt','w')
+g = open('ABACA.txt','w')
 
 block=[0 for i in range(len(content_list))]
 
@@ -59,11 +59,13 @@ aparitii_lit_cuv_word_tryout=[0 for i in range(26)]
 
 aparitii_lit_cuv_lista=[0 for i in range(26)] #aparitiile literei cuvantului din lista
 
-entropia_max=0.0
+inf_de_cuv_ramase=0.0
 
 cuv_entropia_max=[0 for i in range(1)]
 
-for word_tryout in ["TAREI"]:
+nr_cuv_ramase_adunate=0
+
+for word_tryout in ["HOBBY"]:
     
     entropia=0.0
     
@@ -137,9 +139,15 @@ for word_tryout in ["TAREI"]:
                             #g.write('\n')
                             block[poz]=1
                         elif word_tryout[letter] not in content_list[poz]:
+                            #g.write("TEMPLATE 1 b: ")
+                            #g.write(content_list[poz])
+                            #g.write('\n')
                             block[poz]=1
                         elif word_tryout[letter] in content_list[poz] and (aparitii_lit_cuv_word_tryout[ord(word_tryout[letter])-ord('A')] > (litera_blocata_2[ord(word_tryout[letter])-ord('A')]+litera_blocata_1[ord(word_tryout[letter])-ord('A')])):
                             if aparitii_lit_cuv_lista[ord(word_tryout[letter])-ord('A')] > (litera_blocata_2[ord(word_tryout[letter])-ord('A')]+litera_blocata_1[ord(word_tryout[letter])-ord('A')]):
+                                #g.write("TEMPLATE 1 c: ")
+                                #g.write(content_list[poz])
+                                #g.write('\n')
                                 block[poz]=1
                         
 
@@ -154,7 +162,7 @@ for word_tryout in ["TAREI"]:
                             break
                     
             poz=poz+1
-        
+
         g.write('\n')  
         g.write("Cuvinte eliminate:\n")
         for i in range (len(content_list)):
@@ -177,7 +185,6 @@ for word_tryout in ["TAREI"]:
             if block[i]==1:
                 nr_cuv_elim+=1
 
-        
         g.write("Nr cuv eliminate: ")
         g.write(str(nr_cuv_elim))
         g.write('\n')
@@ -185,23 +192,26 @@ for word_tryout in ["TAREI"]:
         g.write(str(len(content_list)-nr_cuv_elim))      
         g.write('\n')  
         g.write('\n')
-
         #g.write('\n')
 
         #calculam entropia
         entropia+=entropy(nr_cuv_elim)
-    
+        nr_cuv_ramase_adunate+=len(content_list)-nr_cuv_elim
+    """
     g.write(word_tryout)
     g.write('\n')
     g.write(str(entropia))
-    if entropia>entropia_max:
-        print (str(cuv_entropia_max),entropia_max,sep=" ")
-        print ()
-        entropia_max=entropia
+    """
+    if entropia>inf_de_cuv_ramase:
+        #print (str(cuv_entropia_max),inf_de_cuv_ramase,sep=" ")
+        #print ()
+        inf_de_cuv_ramase=entropia
         cuv_entropia_max[0]=word_tryout
 
-print ("Cuvantul cu cea mai mare entropie: ", str(cuv_entropia_max), sep=" ")
-print (entropia_max)
+print (nr_cuv_ramase_adunate)
+print ()
+print ("Cuvantul ce imi pastreaza cele mai putine cuvinte: ", str(cuv_entropia_max), sep=" ")
+print (inf_de_cuv_ramase)
 
 g.close()
 
