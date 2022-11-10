@@ -6,7 +6,11 @@ with open('wordlist.txt','r') as f:
 		m=listl.append(listli)
 		print(list(line))
 
+g = open('data.out','w')
+f.close
+g.close
 
+alphabet = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z".split()
 L=[]
 x="ABACA"
 guess_list="TAIN0"
@@ -17,6 +21,9 @@ for i in range (0,5):
         L.append(x[i])
     if s[i]=="0":
         s[i]=input("litera:")
+   # if s[i]==alphabet:
+
+
 
 
 

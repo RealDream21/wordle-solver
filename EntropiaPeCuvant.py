@@ -244,6 +244,9 @@ deci eu trebuie sa verific daca mai sunt de 2 sau 1 si e aceeasi litera cu liter
 """
 
 """
+
+modified_list=content_list[:]
+
 ABACA
 00000
 00001   cuv[4]!=cuv_content[4] and cuv[4] in cuv_content
