@@ -1,5 +1,4 @@
-import math
-from tqdm import tqdm
+import math 
 
 #entropia
 def entropy(nr_cazuri_template, modified_content_list):
@@ -23,7 +22,7 @@ def Word_With_Max_Entropy(modified_content_list):
     entropy_max=0.0
     word_entropy_max=[""]
 
-    for word in tqdm(modified_content_list): # pt cuvantul asta eu primesc feedback
+    for word in modified_content_list: # pt cuvantul asta eu primesc feedback
     
         pos_temp=0
         entropy_calc=0.0
@@ -83,7 +82,6 @@ def delete_from_list(word_tryout, template, list_words):
 
     #template este string si eu trebuie sa il fac int
     template=[int(x) for x in template]
-    print(template)
 
     block=[0 for i in range(len(list_words))]
 
@@ -98,7 +96,12 @@ def delete_from_list(word_tryout, template, list_words):
     aparitii_lit_cuv_lista=[0 for i in range(26)] #aparitiile literei cuvantului din lista
 
     poz=0
-    
+
+    """
+    for i in range(len(word_tryout)):
+        print(word_tryout[i])
+    """
+
     for letter in range (5):
         aparitii_lit_cuv_word_tryout[ord(word_tryout[letter])-ord('A')]+=1
 
@@ -129,9 +132,6 @@ def delete_from_list(word_tryout, template, list_words):
             for letter in range (5):
                 if template[letter]==2: 
                     if word_tryout[letter]!=list_words[poz][letter]:
-                        #g.write("TEMPLATE 2: ")
-                        #g.write(list_words[poz])
-                        #g.write('\n')
                         block[poz]=1
                     elif aparitii_lit_cuv_word_tryout[ord(word_tryout[letter])-ord('A')] > (litera_blocata_2[ord(word_tryout[letter])-ord('A')]+litera_blocata_1[ord(word_tryout[letter])-ord('A')]):
                         if aparitii_lit_cuv_lista[ord(word_tryout[letter])-ord('A')] > (litera_blocata_2[ord(word_tryout[letter])-ord('A')]+litera_blocata_1[ord(word_tryout[letter])-ord('A')]):
@@ -141,20 +141,11 @@ def delete_from_list(word_tryout, template, list_words):
             for letter in range (5):
                 if template[letter]==1: #daca am 1 trebuie neaparat sa fie in cuvant
                     if word_tryout[letter]==list_words[poz][letter]:
-                        #g.write("TEMPLATE 1 a: ")
-                        #g.write(list_words[poz])
-                        #g.write('\n')
                         block[poz]=1
                     elif word_tryout[letter] not in list_words[poz]:
-                        #g.write("TEMPLATE 1 b: ")
-                        #g.write(list_words[poz])
-                        #g.write('\n')
                         block[poz]=1
                     elif word_tryout[letter] in list_words[poz] and (aparitii_lit_cuv_word_tryout[ord(word_tryout[letter])-ord('A')] > (litera_blocata_2[ord(word_tryout[letter])-ord('A')]+litera_blocata_1[ord(word_tryout[letter])-ord('A')])):
                         if aparitii_lit_cuv_lista[ord(word_tryout[letter])-ord('A')] > (litera_blocata_2[ord(word_tryout[letter])-ord('A')]+litera_blocata_1[ord(word_tryout[letter])-ord('A')]):
-                            #g.write("TEMPLATE 1 c: ")
-                            #g.write(list_words[poz])
-                            #g.write('\n')
                             block[poz]=1
                     
 
@@ -162,25 +153,16 @@ def delete_from_list(word_tryout, template, list_words):
             for letter in range (5):
                 if template[letter]==0 and (litera_blocata_1[ord(word_tryout[letter])-ord('A')]==0 and litera_blocata_2[ord(word_tryout[letter])-ord('A')]==0):
                     if word_tryout[letter] in list_words[poz]:
-                        #g.write("TEMPLATE 0: ")
-                        #g.write(list_words[poz])
-                        #g.write('\n')
                         block[poz]=1 
                         break
                     
         poz=poz+1
-    
-    """
-    for i in range (len(list_words)):
-        if block[i]==1:
-            print(list_words[i])
-    """
 
     for i in range (len(list_words)):
         if block[i]==0:
             remaining_words.append(list_words[i])
 
-    print(len(remaining_words))
+    #print(len(remaining_words))
 
     return remaining_words
 
@@ -198,14 +180,14 @@ steps=0
 
 """
 
-Pt a scadea timpul de rulare o sa fac mai intai pt TAREI feedbacul si lista ce ramane dupa eliminare, 
+Pt a scadea timpul de rulare o sa fac mai intai pt TAREI feedbackul si lista ce ramane dupa eliminare, 
 pentru a nu face iar entropia pe lista initiala de fiecare data
 
 """
-for word in ["ABACA"]:
+
+for word in content_list:
     
     modified_content_list=content_list[:]
-
     word_try="TAREI"
     feedback = "00000"
     guess_list = list(word)
@@ -231,15 +213,20 @@ for word in ["ABACA"]:
 
     modified_content_list=delete_from_list(word_try, feedback, modified_content_list)
     steps+=1
+
+    """
     print(len(modified_content_list))
+    for line in modified_content_list:
+        print (line)
     #print(modified_content_list, sep='\n')
-"""
+    """
+
     while word_try!=word:
         
         feedback = "00000"
         
         word_try=""
-        word_try=word_try+Word_With_Max_Entropy(modified_content_list)
+        word_try=word_try+"".join(Word_With_Max_Entropy(modified_content_list))
         guess_list = list(word)
         feedback = list(feedback)
         
@@ -262,12 +249,19 @@ for word in ["ABACA"]:
         feedback="".join(feedback)
 
         template=feedback
-
+        """
+        for i in range(len(word_try)):
+            print(word_try[i])
+        """
         modified_content_list=delete_from_list(word_try, template, modified_content_list)
-        steps+=1      
-"""      
-    
+        steps+=1         
+
+avg=0.0
+avg=steps/11454
+
 print (steps)
+print ()
+print (avg)
 
 #print(Word_With_Max_Entropy(content_list))
 
