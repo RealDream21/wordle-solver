@@ -1,3 +1,4 @@
+"""
 with open('wordlist.txt','r') as f:
 	listl=[]
 	for line in f:
@@ -5,10 +6,14 @@ with open('wordlist.txt','r') as f:
 		listli=strip_lines.split()
 		m=listl.append(listli)
 		print(list(line))
+<<<<<<< Updated upstream
 
 g = open('data.out','w')
 f.close
 g.close
+=======
+"""
+>>>>>>> Stashed changes
 
 alphabet = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z".split()
 L=[]
