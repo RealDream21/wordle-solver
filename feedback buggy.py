@@ -13,7 +13,7 @@ cuv=input("cuv=")
 #lista initiata cu valoare vida
 s=" "
 
-#Program pentru ghcirea cuvantului
+#Program pentru feedbackul cuvantului cuvantului
 for i in range (0,5): 
     if cuv[i]==x[i]:
         #print(2)
