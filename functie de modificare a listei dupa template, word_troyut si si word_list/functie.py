@@ -13,6 +13,8 @@ def delete_from_list(word_tryout, template, word_list):
                 to_add = False
             elif template[index] == '1' and word[index] not in word_tryout:
                 to_add = False
+            elif template[index] == '0' and word[index] in word_tryout:
+                to_add = False
         if to_add == True:
             remaining_words.append(word)
     return remaining_words
