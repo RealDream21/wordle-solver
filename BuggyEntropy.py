@@ -1,5 +1,7 @@
 import math
 
+from tqdm import tqdm
+
 # GET ASCII CODE OF LETTER | - "A"
 def ordA(letter):
 	return ord(letter) - ord("A")
@@ -27,7 +29,7 @@ def max_entropy_word(word_list):
 
 		for word_to_guess in word_list: #asta e guess
 			word_try = word
-			feedback = [0 for i in range(5)]
+			feedback = ["0" for i in range(5)]
 
 			for i in range(5):
 				if word_try[i] == word_to_guess[i]:
@@ -44,7 +46,7 @@ def max_entropy_word(word_list):
 				freq_templates[templates.index(feedback)] += 1
 			except:
 				templates.append(feedback)
-				freq_templates[-1] = 1
+				freq_templates[len(templates)-1] = 1
 
 		for i in range(len(templates)):
 			entropy_calc += entropy(freq_templates[i], word_list)
@@ -86,11 +88,11 @@ def main():
 		pentru a nu face iar entropia pe lista initiala de fiecare data
 		'''
 
-		for word in word_list:
+		for word in tqdm(word_list):
 			moded_word_list = word_list[:]
 
 			word_try = "TAREI"
-			feedback = [0 for i in range(5)]
+			feedback = ["0" for i in range (5)]
 
 			for i in range(5):
 				if word_try[i] == word[i]:
@@ -107,7 +109,7 @@ def main():
 
 			while word_try != word:
 				word_try = max_entropy_word(moded_word_list)
-				template = [0 for i in range(5)]
+				feedback = ["0" for i in range(5)]
 
 				for i in range(5):
 					if word_try[i] == word[i]:
@@ -118,9 +120,9 @@ def main():
 						if word.find(word_try[i]) > -1:
 							feedback[i] = "1"
 
-				template = "".join(template)
+				feedback = "".join(feedback)
 
-				moded_word_list = delete_from_list(word_try, template, moded_word_list)
+				moded_word_list = delete_from_list(word_try, feedback, moded_word_list)
 				steps += 1
 
 		print(steps)
