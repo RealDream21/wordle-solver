@@ -19,5 +19,5 @@ def delete_from_list(word_tryout, template, word_list):
             remaining_words.append(word)
     return remaining_words
 
-print(delete_from_list("ABACA", "10102", word_list))
+print(delete_from_list("TAREI", "20010", word_list))
 #daca scot al doilea elif, atunci apare un cuvant ce are pe ac pozitie aceeasi cifra, dar ca template apare la 1
