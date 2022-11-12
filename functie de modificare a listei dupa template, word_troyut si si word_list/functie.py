@@ -9,11 +9,11 @@ def delete_from_list(word_tryout, template, word_list):
         for index in range(5):
             if template[index] == '2' and word[index] != word_tryout[index]:
                 to_add = False
-            elif template[index] == '1' and word[index] == word_tryout[index]:
+            if template[index] == '1' and word[index] == word_tryout[index]:
                 to_add = False
-            elif template[index] == '1' and word[index] not in word_tryout:
+            if template[index] == '1' and word_tryout[index] not in word:
                 to_add = False
-            elif template[index] == '0' and word[index] in word_tryout:
+            if template[index] == '0' and word_tryout[index] in word:
                 to_add = False
         if to_add == True:
             remaining_words.append(word)
