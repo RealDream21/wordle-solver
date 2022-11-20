@@ -72,3 +72,4 @@ while user_input != to_guess and user_input != "quit\n":
         client.send(feedback.encode())
         print(feedback)
 client.send('quit'.encode())
+input('Apasa ENTER pentru a iesi')
