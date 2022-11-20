@@ -6,32 +6,11 @@ PORT = 55012
 HOST = socket.gethostname()
 
 server.connect((HOST, PORT))
-"""
-quit_option = None
-run = None
-try:
-    run = len(server.recv(5))
-except:
-    run = False
-    quit_option = 1
-else:
-    if run > 0:
-        run = True
-        print("Ready for input.\n")
-    else:
-        run = False
-        quit_option = 1
-"""
-# GET ASCII CODE OF LETTER | - "A"
-def ordA(letter):
-	return ord(letter) - ord("A")
-
 
 #entropia
 def entropy(template_freq, word_list):
 	template_ratio = template_freq / len(word_list)
 	return (template_ratio * -math.log2(template_ratio))
-
 
 #returneaza cuvantul cu cea mai mare entropie
 def max_entropy_word(word_list):
