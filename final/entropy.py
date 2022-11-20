@@ -76,8 +76,20 @@ def delete_from_list(word_tryout, template, word_list):
             remaining_words.append(word)
     return remaining_words
 
+def give_feedback(guess, input):
+    feedback = ""
+    for i in range (0, 5):
+        if input[i] == guess[i]:
+            feedback += "2"
+        else:
+            if input[i] in guess:
+                feedback += "1"
+            else:
+                feedback += "0"
+
 
 # MAIN Function
+
 def main():
 	with open("wordlist.txt","r") as words_file:
 		word_list = (words_file.read()).split("\n")
@@ -87,6 +99,8 @@ def main():
 		Pt a scadea timpul de rulare o sa fac mai intai pt TAREI feedbackul si lista ce ramane dupa eliminare,
 		pentru a nu face iar entropia pe lista initiala de fiecare data
 		'''
+
+
 
 		for word in tqdm(word_list):
 			moded_word_list = word_list[:]
