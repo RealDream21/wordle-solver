@@ -43,6 +43,12 @@ user_input = None
 while user_input != to_guess and user_input != "quit\n":
     user_input = input("Give Input: ")
     user_input = user_input.strip()
+    user_input = user_input.upper()
+    while user_input not in content_list and user_input != '1' and user_input != '2':
+        user_input = input("Input gresit, da alt input: ")
+        user_input = user_input.upper()
+        user_input = user_input.strip()
+
     if user_input == '1':
         client.send('1'.encode())
         next_guess = client.recv(5).decode()
