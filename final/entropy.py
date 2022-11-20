@@ -1,7 +1,27 @@
 import math
+import socket
 
-from tqdm import tqdm
+server = socket.socket()
+PORT = 55012
+HOST = socket.gethostname()
 
+server.connect((HOST, PORT))
+"""
+quit_option = None
+run = None
+try:
+    run = len(server.recv(5))
+except:
+    run = False
+    quit_option = 1
+else:
+    if run > 0:
+        run = True
+        print("Ready for input.\n")
+    else:
+        run = False
+        quit_option = 1
+"""
 # GET ASCII CODE OF LETTER | - "A"
 def ordA(letter):
 	return ord(letter) - ord("A")
@@ -30,7 +50,6 @@ def max_entropy_word(word_list):
 		for word_to_guess in word_list: #asta e guess
 			word_try = word
 			feedback = ["0" for i in range(5)]
-
 			for i in range(5):
 				if word_try[i] == word_to_guess[i]:
 					feedback[i] = "2"
@@ -87,62 +106,30 @@ def give_feedback(guess, input):
             else:
                 feedback += "0"
 
-
 # MAIN Function
-
 def main():
+	pas = 0
 	with open("wordlist.txt","r") as words_file:
 		word_list = (words_file.read()).split("\n")
-		steps = 0
-
-		'''
-		Pt a scadea timpul de rulare o sa fac mai intai pt TAREI feedbackul si lista ce ramane dupa eliminare,
-		pentru a nu face iar entropia pe lista initiala de fiecare data
-		'''
-
-
-
-		for word in tqdm(word_list):
-			moded_word_list = word_list[:]
-
-			word_try = "TAREI"
-			feedback = ["0" for i in range (5)]
-
-			for i in range(5):
-				if word_try[i] == word[i]:
-					feedback[i] = "2"
-
-			for i in range(5):
-				if feedback[i] == "0":
-					if word.find(word_try[i]) > -1:
-						feedback[i] = "1"
-
-			feedback = "".join(feedback)
-			moded_word_list = delete_from_list(word_try, feedback, moded_word_list)
-			steps += 1
-
-			while word_try != word:
-				word_try = max_entropy_word(moded_word_list)
-				feedback = ["0" for i in range(5)]
-
-				for i in range(5):
-					if word_try[i] == word[i]:
-						feedback[i] = "2"
-
-				for i in range(5):
-					if feedback[i] == "0":
-						if word.find(word_try[i]) > -1:
-							feedback[i] = "1"
-
-				feedback = "".join(feedback)
-
-				moded_word_list = delete_from_list(word_try, feedback, moded_word_list)
-				steps += 1
-
-		print(steps)
-		print()
-		print(steps / 11454)
-
+		next_guess = ""
+		while True:
+			user_input = server.recv(5).decode()
+			if user_input == 'quit':
+				break
+			if user_input == '1':
+				if pas == 0:
+					server.send('TAREI'.encode())
+					feedback = server.recv(5).decode()
+					word_list = delete_from_list("TAREI", feedback, word_list)
+				else:
+					server.send(next_guess.encode())
+					feedback = server.recv(5).decode()
+					word_list = delete_from_list(next_guess, feedback, word_list)
+			else:
+				feedback = server.recv(5).decode()
+				word_list = delete_from_list(user_input, feedback, word_list)
+			next_guess = max_entropy_word(word_list)
+			pas += 1
 
 # Start Program
 main()
