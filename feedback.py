@@ -39,7 +39,14 @@ def give_feedback(guess, input):
     return feedback
 
 user_input = None
-
+print("Apasati 1 pentru a primi urmatorul cuvant de la calculator\n"
+      "Apasati 2 pentru a lasa calculatorul sa joace pana la final\n"
+      "Altfel, dati un cuvant din lista de cuvinte pentru a fi ghicit\n"
+      "\n"
+      "Instructiuni pentru feedback:\n"
+      "valoarea 1 inseamna litera buna, dar pozitia gresita\n"
+      "valoarea 2 inseamna litera buna pe pozitia buna\n"
+      "valoarea 0 inseamna ca litera nu a fost gasita in cuvant\n")
 while user_input != to_guess and user_input != "quit\n":
     user_input = input("Give Input: ")
     user_input = user_input.strip()
