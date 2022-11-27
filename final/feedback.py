@@ -4,7 +4,7 @@ import socket
 server = socket.socket()
 PORT = 55012
 maxConn = 1
-IP = socket.gethostname()
+IP = socket.gethostbyname("localhost")
 
 server.bind((IP, PORT))
 server.listen(maxConn)

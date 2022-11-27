@@ -3,7 +3,7 @@ import socket
 
 server = socket.socket()
 PORT = 55012
-HOST = socket.gethostname()
+HOST = socket.gethostbyname("localhost")
 
 server.connect((HOST, PORT))
 
