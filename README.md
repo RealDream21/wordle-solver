@@ -4,9 +4,9 @@ Nume echipa: Multiplexorii
 
 GRUPA:134
 
-Membri: Stancila Ionut-Marian
-        Florete Fabian-Andrei
-        Iacovita Cristian-Alexandru
+Membri: Stancila Ionut-Marian,
+        Florete Fabian-Andrei,
+        Iacovita Cristian-Alexandru,
         Radu Alexandru-Mihail
 
 versiunea de python folosita: Python 3.11
