@@ -11,16 +11,6 @@ server.listen(maxConn)
 
 client, address = server.accept()
 
-"""
-quit_info = 0
-running = True
-try:
-    client.send("ready".encode())
-except:
-    quit_info = 1
-    running = False
-"""
-
 file = open("wordlist.txt","r")
 file_content = file.read()
 content_list = file_content.split('\n')
