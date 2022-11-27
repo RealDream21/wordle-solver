@@ -1,6 +1,6 @@
 # wordle solver
 
-Nume echipa: CuvDePePoz7683 
+Nume echipa: Multiplexorii
 GRUPA:134
 Membri: Stancila Ionut-Marian
         Florete Fabian-Andrei
