@@ -1,7 +1,9 @@
 # wordle solver
 
 Nume echipa: Multiplexorii
+
 GRUPA:134
+
 Membri: Stancila Ionut-Marian
         Florete Fabian-Andrei
         Iacovita Cristian-Alexandru
